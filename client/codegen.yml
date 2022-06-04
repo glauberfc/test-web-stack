@@ -1,0 +1,24 @@
+schema:
+  - ${HASURA_API_URL}:
+      headers:
+        x-hasura-admin-secret: ${HASURA_API_SECRET}
+documents: './**/*.graphql'
+generates:
+  ./graphql/generated.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+    plugins:
+      - add:
+          content: "import { endpointUrl, fetchParams } from 'config/fetcher';"
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher:
+        endpoint: 'endpointUrl'
+        fetchParams: 'fetchParams'
+      addInfiniteQuery: true
+  ./graphql.schema.json:
+    plugins:
+      - introspection
