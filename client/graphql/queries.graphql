@@ -1,7 +1,12 @@
-query GetUsers {
-  users {
+query Users($limit: Int, $offset: Int) {
+  users(limit: $limit, offset: $offset) {
     id
     name
     description
+  }
+  users_aggregate {
+    aggregate {
+      count
+    }
   }
 }

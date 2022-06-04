@@ -1,11 +1,5 @@
-import { endpointUrl, fetchParams } from 'config/fetcher'
-import {
-  useQuery,
-  useInfiniteQuery,
-  UseQueryOptions,
-  UseInfiniteQueryOptions,
-  QueryFunctionContext,
-} from 'react-query'
+import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -17,26 +11,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>
 }
-
-function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
-  return async (): Promise<TData> => {
-    const res = await fetch(endpointUrl as string, {
-      method: 'POST',
-      ...fetchParams,
-      body: JSON.stringify({ query, variables }),
-    })
-
-    const json = await res.json()
-
-    if (json.errors) {
-      const { message } = json.errors[0]
-
-      throw new Error(message)
-    }
-
-    return json.data
-  }
-}
+const defaultOptions = {} as const
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -420,9 +395,12 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']>>
 }
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never }>
+export type UsersQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+}>
 
-export type GetUsersQuery = {
+export type UsersQuery = {
   __typename?: 'query_root'
   users: Array<{
     __typename?: 'users'
@@ -430,42 +408,65 @@ export type GetUsersQuery = {
     name: string
     description: string
   }>
-}
-
-export const GetUsersDocument = `
-    query GetUsers {
-  users {
-    id
-    name
-    description
+  users_aggregate: {
+    __typename?: 'users_aggregate'
+    aggregate?: { __typename?: 'users_aggregate_fields'; count: number } | null
   }
 }
-    `
-export const useGetUsersQuery = <TData = GetUsersQuery, TError = unknown>(
-  variables?: GetUsersQueryVariables,
-  options?: UseQueryOptions<GetUsersQuery, TError, TData>,
-) =>
-  useQuery<GetUsersQuery, TError, TData>(
-    variables === undefined ? ['GetUsers'] : ['GetUsers', variables],
-    fetcher<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, variables),
+
+export const UsersDocument = gql`
+  query Users($limit: Int, $offset: Int) {
+    users(limit: $limit, offset: $offset) {
+      id
+      name
+      description
+    }
+    users_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UsersQuery, UsersQueryVariables>(
+    UsersDocument,
     options,
   )
-export const useInfiniteGetUsersQuery = <
-  TData = GetUsersQuery,
-  TError = unknown,
->(
-  pageParamKey: keyof GetUsersQueryVariables,
-  variables?: GetUsersQueryVariables,
-  options?: UseInfiniteQueryOptions<GetUsersQuery, TError, TData>,
-) =>
-  useInfiniteQuery<GetUsersQuery, TError, TData>(
-    variables === undefined
-      ? ['GetUsers.infinite']
-      : ['GetUsers.infinite', variables],
-    (metaData) =>
-      fetcher<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, {
-        ...variables,
-        ...(metaData.pageParam ?? {}),
-      })(),
+}
+export function useUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(
+    UsersDocument,
     options,
   )
+}
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>
+export type UsersQueryResult = Apollo.QueryResult<
+  UsersQuery,
+  UsersQueryVariables
+>

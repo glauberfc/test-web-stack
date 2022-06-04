@@ -9,16 +9,9 @@ generates:
       afterOneFileWrite:
         - prettier --write
     plugins:
-      - add:
-          content: "import { endpointUrl, fetchParams } from 'config/fetcher';"
       - typescript
       - typescript-operations
-      - typescript-react-query
-    config:
-      fetcher:
-        endpoint: 'endpointUrl'
-        fetchParams: 'fetchParams'
-      addInfiniteQuery: true
+      - typescript-react-apollo
   ./graphql.schema.json:
     plugins:
       - introspection
