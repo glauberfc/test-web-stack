@@ -1,13 +1,20 @@
+import EditUserModal from 'components/EditUserModal/EditUserModal'
 import SearchInput from 'components/SearchInput/SearchInput'
-import { useUsersQuery } from 'graphql/generated'
+import { Users as User, useUsersQuery } from 'graphql/generated'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { MouseEvent, useEffect, useRef } from 'react'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 import styles from 'styles/Home.module.css'
+
+export type ModalStatus = {
+  isOpen: boolean
+  selectedUser?: Partial<User>
+}
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const [modalStatus, setModalStatus] = useState<ModalStatus>({ isOpen: false })
   const paginationRef = useRef(Number(router.query?.page))
   const itemsPerPage = Number(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE)
   const defaultQueryVariables = {
@@ -70,7 +77,13 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
           {data?.users.map((user) => (
-            <div key={user.id} className={styles.card}>
+            <div
+              key={user.id}
+              className={styles.card}
+              onClick={() =>
+                setModalStatus({ isOpen: true, selectedUser: user })
+              }
+            >
               <h2>{user.name}</h2>
               <p>{user.description}</p>
             </div>
@@ -84,6 +97,15 @@ const Home: NextPage = () => {
         >
           {hasNextPage ? 'Load more' : 'No more users'}
         </button>
+
+        {modalStatus.isOpen ? (
+          <EditUserModal
+            {...modalStatus}
+            onClose={() =>
+              setModalStatus({ isOpen: false, selectedUser: undefined })
+            }
+          />
+        ) : null}
       </main>
     </div>
   )
