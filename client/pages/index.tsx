@@ -1,3 +1,4 @@
+import SearchInput from 'components/SearchInput/SearchInput'
 import { useUsersQuery } from 'graphql/generated'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -9,14 +10,15 @@ const Home: NextPage = () => {
   const router = useRouter()
   const paginationRef = useRef(Number(router.query?.page))
   const itemsPerPage = Number(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE)
+  const defaultQueryVariables = {
+    limit: !paginationRef.current
+      ? itemsPerPage
+      : paginationRef.current * itemsPerPage,
+    offset: 0,
+  }
 
-  const { data, loading, fetchMore } = useUsersQuery({
-    variables: {
-      limit: !paginationRef.current
-        ? itemsPerPage
-        : paginationRef.current * itemsPerPage,
-      offset: 0,
-    },
+  const { data, loading, fetchMore, refetch } = useUsersQuery({
+    variables: defaultQueryVariables,
   })
 
   const hasNextPage =
@@ -31,6 +33,14 @@ const Home: NextPage = () => {
         offset: data?.users?.length,
       },
     })
+  }
+
+  function searchCallback(value: string) {
+    refetch({ name: { _ilike: `%${value}%` } })
+  }
+
+  function clearSearchCallback() {
+    refetch({ ...defaultQueryVariables, name: {} })
   }
 
   useEffect(() => {
@@ -49,14 +59,14 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Users list</h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
+        <div className={styles.description}>
+          <SearchInput
+            searchCallback={searchCallback}
+            clearSearchCallback={clearSearchCallback}
+          />
+        </div>
 
         <div className={styles.grid}>
           {data?.users.map((user) => (

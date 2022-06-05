@@ -398,6 +398,7 @@ export type Uuid_Comparison_Exp = {
 export type UsersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
+  name?: InputMaybe<String_Comparison_Exp>
 }>
 
 export type UsersQuery = {
@@ -415,13 +416,13 @@ export type UsersQuery = {
 }
 
 export const UsersDocument = gql`
-  query Users($limit: Int, $offset: Int) {
-    users(limit: $limit, offset: $offset) {
+  query Users($limit: Int, $offset: Int, $name: String_comparison_exp = {}) {
+    users(limit: $limit, offset: $offset, where: { name: $name }) {
       id
       name
       description
     }
-    users_aggregate {
+    users_aggregate(where: { name: $name }) {
       aggregate {
         count
       }
@@ -443,6 +444,7 @@ export const UsersDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      name: // value for 'name'
  *   },
  * });
  */
