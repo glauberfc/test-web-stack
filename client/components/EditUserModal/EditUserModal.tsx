@@ -1,6 +1,6 @@
-import { Users as User } from 'graphql/generated'
-import { MouseEvent, useEffect } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Users as User, useUpdateUsersMutation } from 'graphql/generated'
+import { MouseEvent } from 'react'
+import { useForm } from 'react-hook-form'
 import styles from './EditUserModal.module.css'
 
 type Inputs = {
@@ -19,16 +19,29 @@ type EditUserModalProps = {
 
 export default function EditUserModal(props: EditUserModalProps) {
   const { isOpen, onClose, selectedUser } = props
-
+  const [updateUsers] = useUpdateUsersMutation()
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>({
-    defaultValues: selectedUser,
+    mode: 'onSubmit',
+    defaultValues: {
+      name: selectedUser?.name,
+      address: selectedUser?.address,
+      description: selectedUser?.description,
+    },
   })
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  async function onSubmit(data: Inputs) {
+    await updateUsers({
+      variables: {
+        id: { _eq: selectedUser?.id },
+        _set: { ...data },
+      },
+    })
+    onClose()
+  }
 
   function handleCancelClick(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
@@ -37,7 +50,11 @@ export default function EditUserModal(props: EditUserModalProps) {
 
   function showInputError(inputName: InputName) {
     return errors[inputName] ? (
-      <span role="alert">{errors[inputName]?.message}</span>
+      <span role="alert">
+        {errors[inputName]?.type === 'required'
+          ? 'This field is required'
+          : 'Please, type a valid value'}
+      </span>
     ) : null
   }
 
@@ -64,8 +81,14 @@ export default function EditUserModal(props: EditUserModalProps) {
           />
           {showInputError('description')}
 
-          <button type="submit">Save</button>
-          <button type="button" onClick={handleCancelClick}>
+          <button type="submit" disabled={isSubmitting}>
+            Save
+          </button>
+          <button
+            type="button"
+            onClick={handleCancelClick}
+            disabled={isSubmitting}
+          >
             Cancel
           </button>
         </form>

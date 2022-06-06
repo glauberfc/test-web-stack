@@ -1,0 +1,28 @@
+fragment UserFields on users {
+  id
+  name
+  description
+  address
+}
+
+query Users($limit: Int, $offset: Int, $name: String_comparison_exp = {}) {
+  users(limit: $limit, offset: $offset, where: { name: $name }) {
+    ...UserFields
+  }
+  users_aggregate(where: { name: $name }) {
+    aggregate {
+      count
+    }
+  }
+}
+
+mutation UpdateUsers(
+  $id: uuid_comparison_exp = {}
+  $_set: users_set_input = {}
+) {
+  update_users(where: { id: $id }, _set: $_set) {
+    returning {
+      ...UserFields
+    }
+  }
+}

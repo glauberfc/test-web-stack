@@ -395,6 +395,14 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']>>
 }
 
+export type UserFieldsFragment = {
+  __typename?: 'users'
+  id: any
+  name: string
+  description: string
+  address: string
+}
+
 export type UsersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
@@ -408,6 +416,7 @@ export type UsersQuery = {
     id: any
     name: string
     description: string
+    address: string
   }>
   users_aggregate: {
     __typename?: 'users_aggregate'
@@ -415,12 +424,37 @@ export type UsersQuery = {
   }
 }
 
+export type UpdateUsersMutationVariables = Exact<{
+  id?: InputMaybe<Uuid_Comparison_Exp>
+  _set?: InputMaybe<Users_Set_Input>
+}>
+
+export type UpdateUsersMutation = {
+  __typename?: 'mutation_root'
+  update_users?: {
+    __typename?: 'users_mutation_response'
+    returning: Array<{
+      __typename?: 'users'
+      id: any
+      name: string
+      description: string
+      address: string
+    }>
+  } | null
+}
+
+export const UserFieldsFragmentDoc = gql`
+  fragment UserFields on users {
+    id
+    name
+    description
+    address
+  }
+`
 export const UsersDocument = gql`
   query Users($limit: Int, $offset: Int, $name: String_comparison_exp = {}) {
     users(limit: $limit, offset: $offset, where: { name: $name }) {
-      id
-      name
-      description
+      ...UserFields
     }
     users_aggregate(where: { name: $name }) {
       aggregate {
@@ -428,6 +462,7 @@ export const UsersDocument = gql`
       }
     }
   }
+  ${UserFieldsFragmentDoc}
 `
 
 /**
@@ -471,4 +506,61 @@ export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>
 export type UsersQueryResult = Apollo.QueryResult<
   UsersQuery,
   UsersQueryVariables
+>
+export const UpdateUsersDocument = gql`
+  mutation UpdateUsers(
+    $id: uuid_comparison_exp = {}
+    $_set: users_set_input = {}
+  ) {
+    update_users(where: { id: $id }, _set: $_set) {
+      returning {
+        ...UserFields
+      }
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`
+export type UpdateUsersMutationFn = Apollo.MutationFunction<
+  UpdateUsersMutation,
+  UpdateUsersMutationVariables
+>
+
+/**
+ * __useUpdateUsersMutation__
+ *
+ * To run a mutation, you first call `useUpdateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUsersMutation, { data, loading, error }] = useUpdateUsersMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      _set: // value for '_set'
+ *   },
+ * });
+ */
+export function useUpdateUsersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUsersMutation,
+    UpdateUsersMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateUsersMutation, UpdateUsersMutationVariables>(
+    UpdateUsersDocument,
+    options,
+  )
+}
+export type UpdateUsersMutationHookResult = ReturnType<
+  typeof useUpdateUsersMutation
+>
+export type UpdateUsersMutationResult =
+  Apollo.MutationResult<UpdateUsersMutation>
+export type UpdateUsersMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUsersMutation,
+  UpdateUsersMutationVariables
 >
