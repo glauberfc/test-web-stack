@@ -452,7 +452,8 @@ export const UserFieldsFragmentDoc = gql`
   }
 `
 export const UsersDocument = gql`
-  query Users($limit: Int, $offset: Int, $name: String_comparison_exp = {}) {
+  query Users($limit: Int, $offset: Int, $name: String_comparison_exp = {})
+  @cached {
     users(limit: $limit, offset: $offset, where: { name: $name }) {
       ...UserFields
     }
