@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 type SearchInputProps = {
-  searchCallback: (value: string) => void
-  clearSearchCallback: () => void
+  searchCallback: (value: string) => Promise<void> | void
+  clearSearchCallback: () => Promise<void> | void
 }
 
 export default function SearchInput({
@@ -10,28 +10,24 @@ export default function SearchInput({
   clearSearchCallback = () => {},
 }: SearchInputProps) {
   const [value, setValue] = useState('')
-  const isDirtyRef = useRef(false)
-  const searchCallbackRef = useRef(searchCallback)
-  const clearSearchCallbackRef = useRef(clearSearchCallback)
+  const timeoutRef = useRef<NodeJS.Timeout>()
 
-  function hangleChange(event: ChangeEvent<HTMLInputElement>) {
-    setValue(event.currentTarget.value)
-    if (!isDirtyRef.current) {
-      isDirtyRef.current = true
-    }
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const inputValue = event.currentTarget.value
+    setValue(inputValue)
+    clearTimeout(timeoutRef.current)
+
+    timeoutRef.current = setTimeout(() => {
+      if (inputValue === '') {
+        return clearSearchCallback()
+      }
+      return searchCallback(inputValue)
+    }, 400)
   }
 
   useEffect(() => {
-    if (!isDirtyRef.current) return
-
-    const handler = setTimeout(() => {
-      value === ''
-        ? clearSearchCallbackRef.current()
-        : searchCallbackRef.current(value)
-    }, 400)
-
-    return () => clearTimeout(handler)
-  }, [value])
+    return () => clearTimeout(timeoutRef.current)
+  }, [])
 
   return (
     <>
@@ -43,7 +39,7 @@ export default function SearchInput({
         name="search"
         placeholder="Search..."
         value={value}
-        onChange={hangleChange}
+        onChange={handleChange}
       />
     </>
   )
