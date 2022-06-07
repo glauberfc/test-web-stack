@@ -18,7 +18,7 @@ type EditUserModalProps = {
 }
 
 export default function EditUserModal(props: EditUserModalProps) {
-  const { isOpen, onClose, selectedUser } = props
+  const { onClose, selectedUser } = props
   const [updateUsers] = useUpdateUsersMutation()
   const {
     register,
@@ -58,7 +58,7 @@ export default function EditUserModal(props: EditUserModalProps) {
     ) : null
   }
 
-  return isOpen ? (
+  return (
     <div className={styles.overlay}>
       <div
         className={styles.container}
@@ -104,5 +104,5 @@ export default function EditUserModal(props: EditUserModalProps) {
         </form>
       </div>
     </div>
-  ) : null
+  )
 }
