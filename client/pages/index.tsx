@@ -80,6 +80,7 @@ const Home: NextPage = () => {
             <div
               key={user.id}
               className={styles.card}
+              data-testid="user-card"
               onClick={() =>
                 setModalStatus({ isOpen: true, selectedUser: user })
               }

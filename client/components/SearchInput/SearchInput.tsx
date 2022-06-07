@@ -37,6 +37,7 @@ export default function SearchInput({
       <input
         id="search-input"
         type="search"
+        role="searchbox"
         placeholder="Search..."
         value={value}
         onChange={handleChange}

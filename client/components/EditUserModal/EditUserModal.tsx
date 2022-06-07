@@ -60,7 +60,11 @@ export default function EditUserModal(props: EditUserModalProps) {
 
   return isOpen ? (
     <div className={styles.overlay}>
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        role="dialog"
+        aria-labelledby="edit-user-modal"
+      >
         <h2>Edit user</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="input-name">Name</label>
