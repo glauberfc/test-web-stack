@@ -31,12 +31,12 @@ export default function SearchInput({
 
   return (
     <>
-      <label htmlFor="searchInput" className="sr-only">
+      <label htmlFor="search-input" className="sr-only">
         Search input
       </label>
       <input
-        id="searchInput"
-        name="search"
+        id="search-input"
+        type="search"
         placeholder="Search..."
         value={value}
         onChange={handleChange}

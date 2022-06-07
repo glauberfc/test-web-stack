@@ -59,24 +59,30 @@ export default function EditUserModal(props: EditUserModalProps) {
   }
 
   return isOpen ? (
-    <div className={styles.backdrop}>
+    <div className={styles.overlay}>
       <div className={styles.container}>
         <h2>Edit user</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="inputName">Name</label>
-          <input id="inputName" {...register('name', { required: true })} />
+          <label htmlFor="input-name">Name</label>
+          <input
+            id="input-name"
+            type="text"
+            {...register('name', { required: true })}
+          />
           {showInputError('name')}
 
-          <label htmlFor="inputAddress">Location</label>
+          <label htmlFor="input-address">Location</label>
           <input
-            id="inputAddress"
+            id="input-address"
+            type="text"
             {...register('address', { required: true })}
           />
           {showInputError('address')}
 
-          <label htmlFor="inputDescription">Description</label>
+          <label htmlFor="input-description">Description</label>
           <input
-            id="inputDescription"
+            id="input-description"
+            type="text"
             {...register('description', { required: true })}
           />
           {showInputError('description')}
