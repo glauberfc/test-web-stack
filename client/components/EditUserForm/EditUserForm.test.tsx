@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { GraphQLError } from 'graphql'
 
 import { UpdateUsersDocument } from '../../graphql-files/generated'
-import EditUserModal from './EditUserModal'
+import EditUserForm from './EditUserForm'
 
 const user = {
   id: '123456',
@@ -18,7 +18,7 @@ describe('Edit user modal', () => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
         <div>
-          <EditUserModal isOpen selectedUser={user} onClose={() => null} />,
+          <EditUserForm user={user} onSubmitSuccess={() => null} />,
         </div>
       </MockedProvider>,
     )
@@ -44,7 +44,7 @@ describe('Edit user modal', () => {
     render(
       <MockedProvider mocks={[mock]} addTypename={false}>
         <div>
-          <EditUserModal isOpen selectedUser={user} onClose={() => null} />,
+          <EditUserForm user={user} onSubmitSuccess={() => null} />,
         </div>
       </MockedProvider>,
     )
@@ -60,7 +60,7 @@ it('should show errors correctly for each input', async () => {
   render(
     <MockedProvider mocks={[]} addTypename={false}>
       <div>
-        <EditUserModal isOpen selectedUser={user} onClose={() => null} />,
+        <EditUserForm user={user} onSubmitSuccess={() => null} />,
       </div>
     </MockedProvider>,
   )

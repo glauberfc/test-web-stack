@@ -1,4 +1,5 @@
-import EditUserModal from 'components/EditUserModal/EditUserModal'
+import EditUserForm from 'components/EditUserForm/EditUserForm'
+import Modal from 'components/Modal/Modal'
 import SearchInput from 'components/SearchInput/SearchInput'
 import { Users as User, useUsersQuery } from 'graphql-files/generated'
 import type { NextPage } from 'next'
@@ -99,14 +100,20 @@ const Home: NextPage = () => {
           {hasNextPage ? 'Load more' : 'No more users'}
         </button>
 
-        {modalStatus.isOpen ? (
-          <EditUserModal
-            {...modalStatus}
-            onClose={() =>
+        <Modal isOpen={modalStatus.isOpen}>
+          <EditUserForm
+            user={modalStatus?.selectedUser ?? {}}
+            onSubmitSuccess={() => {
+              setModalStatus({
+                isOpen: false,
+                selectedUser: undefined,
+              })
+            }}
+            onCancel={() =>
               setModalStatus({ isOpen: false, selectedUser: undefined })
             }
           />
-        ) : null}
+        </Modal>
       </main>
     </div>
   )
