@@ -1,4 +1,4 @@
-import { Users as User, useUpdateUsersMutation } from 'graphql/generated'
+import { Users as User, useUpdateUsersMutation } from 'graphql-files/generated'
 import { MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import styles from './EditUserModal.module.css'
@@ -19,7 +19,7 @@ type EditUserModalProps = {
 
 export default function EditUserModal(props: EditUserModalProps) {
   const { onClose, selectedUser } = props
-  const [updateUsers] = useUpdateUsersMutation()
+  const [updateUsers, { error }] = useUpdateUsersMutation()
   const {
     register,
     handleSubmit,
@@ -34,13 +34,17 @@ export default function EditUserModal(props: EditUserModalProps) {
   })
 
   async function onSubmit(data: Inputs) {
-    await updateUsers({
-      variables: {
-        id: { _eq: selectedUser?.id },
-        _set: { ...data },
-      },
-    })
-    onClose()
+    try {
+      await updateUsers({
+        variables: {
+          id: { _eq: selectedUser?.id },
+          _set: { ...data },
+        },
+      })
+      onClose()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   function handleCancelClick(event: MouseEvent<HTMLButtonElement>) {
@@ -90,6 +94,8 @@ export default function EditUserModal(props: EditUserModalProps) {
             {...register('description', { required: true })}
           />
           {showInputError('description')}
+
+          {error && <span role="alert">{error.message}</span>}
 
           <button type="submit" disabled={isSubmitting}>
             Save

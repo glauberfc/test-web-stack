@@ -4,7 +4,7 @@ schema:
         x-hasura-admin-secret: ${HASURA_API_SECRET}
 documents: './**/*.graphql'
 generates:
-  ./graphql/generated.ts:
+  ./graphql-files/generated.ts:
     hooks:
       afterOneFileWrite:
         - prettier --write

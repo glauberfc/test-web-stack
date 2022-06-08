@@ -1,6 +1,6 @@
 import EditUserModal from 'components/EditUserModal/EditUserModal'
 import SearchInput from 'components/SearchInput/SearchInput'
-import { Users as User, useUsersQuery } from 'graphql/generated'
+import { Users as User, useUsersQuery } from 'graphql-files/generated'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
