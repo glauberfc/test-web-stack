@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 import { Container, Overlay } from './Modal.styles'
 
 type ModalProps = {
@@ -7,7 +7,7 @@ type ModalProps = {
 }
 
 export default function Modal({ isOpen, children }: ModalProps) {
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
     } else {
