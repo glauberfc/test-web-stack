@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Button from 'components/Base/Button'
-import { FormGroup, Input } from 'components/Base/Form'
+import { Alert, FormGroup } from 'components/Base/Form'
 import { Users as User, useUpdateUsersMutation } from 'graphql-files/generated'
 import { MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
@@ -56,11 +56,11 @@ export default function EditUserForm(props: EditUserFormProps) {
 
   function showInputError(inputName: InputName) {
     return errors[inputName] ? (
-      <span role="alert">
+      <Alert role="alert">
         {errors[inputName]?.type === 'required'
           ? 'This field is required'
           : 'Please, type a valid value'}
-      </span>
+      </Alert>
     ) : null
   }
 
@@ -73,45 +73,61 @@ export default function EditUserForm(props: EditUserFormProps) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'stretch',
-          '> div': {
-            margin: '10px auto',
+          '& > div > div:not(:last-child)': {
             width: '100%',
+            margin: '0 auto 22px',
           },
         }}
       >
-        <FormGroup>
-          <label htmlFor="input-name">Name</label>
-          <Input
-            id="input-name"
-            type="text"
-            {...register('name', { required: true })}
-          />
-          {showInputError('name')}
-        </FormGroup>
-
-        <FormGroup>
-          <label htmlFor="input-address">Location</label>
-          <Input
-            id="input-address"
-            type="text"
-            {...register('address', { required: true })}
-          />
-          {showInputError('address')}
-        </FormGroup>
-
-        <FormGroup>
-          <label htmlFor="input-description">Description</label>
-          <Input
-            id="input-description"
-            type="text"
-            {...register('description', { required: true })}
-          />
-          {showInputError('description')}
-        </FormGroup>
-
-        {error && <span role="alert">{error.message}</span>}
-
         <div>
+          <FormGroup>
+            <label htmlFor="input-name">Name</label>
+            <input
+              id="input-name"
+              type="text"
+              {...register('name', { required: true })}
+            />
+            {showInputError('name')}
+          </FormGroup>
+
+          <FormGroup>
+            <label htmlFor="input-address">Location</label>
+            <input
+              id="input-address"
+              type="text"
+              {...register('address', { required: true })}
+            />
+            {showInputError('address')}
+          </FormGroup>
+
+          <FormGroup>
+            <label htmlFor="input-description">Description</label>
+            <input
+              id="input-description"
+              type="text"
+              {...register('description', { required: true })}
+            />
+            {showInputError('description')}
+          </FormGroup>
+        </div>
+
+        {error && (
+          <Alert role="alert" css={{ marginTop: '30px' }}>
+            {error.message}
+          </Alert>
+        )}
+
+        <div
+          css={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            gap: '38px',
+            marginTop: '38px',
+            '> button': {
+              width: '100%',
+            },
+          }}
+        >
           <Button type="submit" disabled={isSubmitting}>
             Save
           </Button>

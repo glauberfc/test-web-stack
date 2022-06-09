@@ -1,10 +1,26 @@
-import { MockedProvider } from '@apollo/client/testing'
+import { ReactNode } from 'react'
+import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { ThemeProvider } from '@emotion/react'
 import { screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { GraphQLError } from 'graphql'
 
 import { UpdateUsersDocument } from '../../graphql-files/generated'
 import EditUserForm from './EditUserForm'
+import theme from '../../styles/theme'
+
+type AllProvidersProps = {
+  children: ReactNode
+  mocks?: ReadonlyArray<MockedResponse>
+}
+
+function AllProviders({ children, mocks = [] }: AllProvidersProps) {
+  return (
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MockedProvider>
+  )
+}
 
 const user = {
   id: '123456',
@@ -16,11 +32,9 @@ const user = {
 describe('Edit user modal', () => {
   it('should work if receives a user', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <div>
-          <EditUserForm user={user} onSubmitSuccess={() => null} />,
-        </div>
-      </MockedProvider>,
+      <AllProviders>
+        <EditUserForm user={user} onSubmitSuccess={() => null} />,
+      </AllProviders>,
     )
 
     expect(screen.getByLabelText(/name/i)).toHaveValue(user.name)
@@ -42,11 +56,9 @@ describe('Edit user modal', () => {
     }
 
     render(
-      <MockedProvider mocks={[mock]} addTypename={false}>
-        <div>
-          <EditUserForm user={user} onSubmitSuccess={() => null} />,
-        </div>
-      </MockedProvider>,
+      <AllProviders mocks={[mock]}>
+        <EditUserForm user={user} onSubmitSuccess={() => null} />,
+      </AllProviders>,
     )
 
     const saveButton = screen.getByRole('button', { name: /save/i })
@@ -58,11 +70,9 @@ describe('Edit user modal', () => {
 
 it('should show errors correctly for each input', async () => {
   render(
-    <MockedProvider mocks={[]} addTypename={false}>
-      <div>
-        <EditUserForm user={user} onSubmitSuccess={() => null} />,
-      </div>
-    </MockedProvider>,
+    <AllProviders>
+      <EditUserForm user={user} onSubmitSuccess={() => null} />,
+    </AllProviders>,
   )
 
   const name = screen.getByLabelText(/name/i)

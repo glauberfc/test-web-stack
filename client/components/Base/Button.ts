@@ -1,33 +1,36 @@
+import { Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import * as colors from 'styles/colors'
 
-const buttonVariants = {
+const buttonVariants = (theme: Theme) => ({
   primary: {
-    background: colors.base,
-    color: colors.text,
+    background: theme.colors.base,
+    color: theme.colors.text,
   },
   secondary: {
-    background: colors.gray100,
-    color: colors.text,
+    background: theme.colors.gray100,
+    color: theme.colors.text,
   },
-}
+})
 
 type ButtonProps = {
   variant?: 'primary' | 'secondary'
 }
 
 const Button = styled.button<ButtonProps>(
-  {
+  ({ theme }) => ({
     padding: '18px 15px',
-    border: `2px solid ${colors.gray200}`,
+    border: `2px solid ${theme.colors.gray200}`,
     lineHeight: '1',
-    fontSize: '13px',
+    fontSize: '0.813rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    cursor: 'pointer',
     borderRadius: '3px',
     ':hover': {
-      background: colors.gray300,
+      background: theme.colors.gray300,
     },
-  },
-  ({ variant = 'primary' }) => buttonVariants[variant],
+  }),
+  ({ variant = 'primary', theme }) => buttonVariants(theme)[variant],
 )
 
 export default Button

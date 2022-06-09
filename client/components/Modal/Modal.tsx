@@ -1,4 +1,4 @@
-import styles from './Modal.module.css'
+import { Container, Overlay } from './Modal.styles'
 
 type ModalProps = {
   isOpen: boolean
@@ -7,14 +7,10 @@ type ModalProps = {
 
 export default function Modal({ isOpen, children }: ModalProps) {
   return isOpen ? (
-    <div className={styles.overlay}>
-      <div
-        className={styles.container}
-        role="dialog"
-        aria-labelledby="edit-user-modal"
-      >
+    <Overlay>
+      <Container role="dialog" aria-labelledby="edit-user-modal">
         {children}
-      </div>
-    </div>
+      </Container>
+    </Overlay>
   ) : null
 }
