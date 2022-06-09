@@ -1,16 +1,23 @@
 /** @jsxImportSource @emotion/react */
+import { NetworkStatus } from '@apollo/client'
 import Button from 'components/Base/Button'
 import { H1, Paragraph } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
 import Modal from 'components/Modal/Modal'
 import SearchInput from 'components/SearchInput/SearchInput'
 import UserCard from 'components/UserCard/UserCard'
-import { Users as User, useUsersQuery } from 'graphql-files/generated'
-import type { NextPage } from 'next'
+import {
+  Users as User,
+  UsersDocument,
+  useUsersQuery,
+} from 'graphql-files/generated'
+import { addApolloState, initializeApollo } from 'lib/apolloClient'
+import type { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { Grid, Header, MainSection } from 'styles/Home.styles'
+import { getPaginationVariables } from 'utils'
 
 export type ModalStatus = {
   isOpen: boolean
@@ -20,30 +27,26 @@ export type ModalStatus = {
 const Home: NextPage = () => {
   const router = useRouter()
   const [modalStatus, setModalStatus] = useState<ModalStatus>({ isOpen: false })
-  const paginationRef = useRef(Number(router.query?.page))
-  const itemsPerPage = Number(process.env.NEXT_PUBLIC_ITEMS_PER_PAGE)
-  const defaultQueryVariables = {
-    limit: !paginationRef.current
-      ? itemsPerPage
-      : paginationRef.current * itemsPerPage,
-    offset: 0,
-  }
+  const page = Number(router.query?.page)
+  const defaultQueryVariables = getPaginationVariables(page)
 
-  const { data, loading, error, fetchMore, refetch } = useUsersQuery({
-    variables: defaultQueryVariables,
-  })
+  const { data, loading, error, fetchMore, refetch, networkStatus } =
+    useUsersQuery({
+      variables: defaultQueryVariables,
+      notifyOnNetworkStatusChange: true,
+    })
 
+  const isLoading = loading || networkStatus === NetworkStatus.refetch
   const hasNextPage =
     Number(data?.users_aggregate.aggregate?.count) > Number(data?.users.length)
 
-  function handleFetchMore(event: MouseEvent<HTMLButtonElement>) {
+  async function handleFetchMore(event: MouseEvent<HTMLButtonElement>) {
     try {
       event.preventDefault()
-      paginationRef.current += 1
-      router.push(`/?page=${paginationRef.current}`, undefined, {
+      router.push(`/?page=${page + 1}`, undefined, {
         shallow: true,
       })
-      fetchMore({
+      await fetchMore({
         variables: {
           offset: data?.users?.length,
         },
@@ -61,18 +64,18 @@ const Home: NextPage = () => {
     refetch({ ...defaultQueryVariables, name: {} })
   }
 
-  function getButtonText(loading: boolean, hasNextPage: boolean) {
-    if (loading) return 'Loading...'
+  function getButtonText() {
+    if (isLoading) return 'Loading...'
     if (hasNextPage) return 'Load more'
+    if (data?.users.length === 0) return 'No users found'
     return 'No more users'
   }
 
   useEffect(() => {
-    if (!paginationRef.current) {
+    if (!page) {
       router.push(`/?page=1`, undefined, { shallow: true })
-      paginationRef.current = 1
     }
-  }, [router])
+  }, [router, page])
 
   return (
     <div>
@@ -123,9 +126,9 @@ const Home: NextPage = () => {
           <Button
             type="button"
             onClick={handleFetchMore}
-            disabled={!hasNextPage || loading}
+            disabled={!hasNextPage || isLoading}
           >
-            {getButtonText(loading, hasNextPage)}
+            {getButtonText()}
           </Button>
         </div>
 
@@ -146,6 +149,21 @@ const Home: NextPage = () => {
       </MainSection>
     </div>
   )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const apolloClient = initializeApollo()
+  const { query } = context
+  const page = Number(query?.page)
+
+  await apolloClient.query({
+    query: UsersDocument,
+    variables: getPaginationVariables(page),
+  })
+
+  return addApolloState(apolloClient, {
+    props: {},
+  })
 }
 
 export default Home
