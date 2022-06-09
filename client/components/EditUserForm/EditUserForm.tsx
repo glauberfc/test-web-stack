@@ -130,7 +130,7 @@ export default function EditUserForm(props: EditUserFormProps) {
           }}
         >
           <Button type="submit" disabled={isSubmitting}>
-            Save
+            {isSubmitting ? 'Saving...' : 'Save'}
           </Button>
           <Button
             type="button"

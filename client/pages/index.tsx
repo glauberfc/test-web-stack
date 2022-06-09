@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Button from 'components/Base/Button'
-import { H1 } from 'components/Base/Typography'
+import { H1, Paragraph } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
 import Modal from 'components/Modal/Modal'
 import SearchInput from 'components/SearchInput/SearchInput'
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     offset: 0,
   }
 
-  const { data, loading, fetchMore, refetch } = useUsersQuery({
+  const { data, loading, error, fetchMore, refetch } = useUsersQuery({
     variables: defaultQueryVariables,
   })
 
@@ -37,14 +37,20 @@ const Home: NextPage = () => {
     Number(data?.users_aggregate.aggregate?.count) > Number(data?.users.length)
 
   function handleFetchMore(event: MouseEvent<HTMLButtonElement>) {
-    event.preventDefault()
-    paginationRef.current += 1
-    router.push(`/?page=${paginationRef.current}`, undefined, { shallow: true })
-    fetchMore({
-      variables: {
-        offset: data?.users?.length,
-      },
-    })
+    try {
+      event.preventDefault()
+      paginationRef.current += 1
+      router.push(`/?page=${paginationRef.current}`, undefined, {
+        shallow: true,
+      })
+      fetchMore({
+        variables: {
+          offset: data?.users?.length,
+        },
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   function searchCallback(value: string) {
@@ -53,6 +59,12 @@ const Home: NextPage = () => {
 
   function clearSearchCallback() {
     refetch({ ...defaultQueryVariables, name: {} })
+  }
+
+  function getButtonText(loading: boolean, hasNextPage: boolean) {
+    if (loading) return 'Loading...'
+    if (hasNextPage) return 'Load more'
+    return 'No more users'
   }
 
   useEffect(() => {
@@ -96,12 +108,24 @@ const Home: NextPage = () => {
             margin: '64px 0',
           }}
         >
+          {error ? (
+            <Paragraph
+              css={{
+                fontSize: '1.5rem',
+                margin: '0 auto 64px',
+                textAlign: 'center',
+              }}
+            >
+              {error.message}
+            </Paragraph>
+          ) : null}
+
           <Button
             type="button"
             onClick={handleFetchMore}
             disabled={!hasNextPage || loading}
           >
-            {hasNextPage ? 'Load more' : 'No more users'}
+            {getButtonText(loading, hasNextPage)}
           </Button>
         </div>
 

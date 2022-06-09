@@ -37,6 +37,7 @@ const Button = styled.button<ButtonProps>(
     },
     '&:disabled': {
       color: 'rgba(0, 0, 0, 0.5)',
+      cursor: 'not-allowed',
     },
   },
   ({ variant = 'primary', theme }) => buttonVariants(theme)[variant],

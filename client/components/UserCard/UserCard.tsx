@@ -46,7 +46,7 @@ export default function UserCard({
         />
       </AvatarContainer>
       <H2 css={[truncate, { marginTop: '32px' }]}>{name}</H2>
-      <Paragraph css={[truncate, { marginTop: '8px' }]}>
+      <Paragraph css={[truncate, { maxWidth: '279px', marginTop: '8px' }]}>
         {description}
       </Paragraph>
     </Card>

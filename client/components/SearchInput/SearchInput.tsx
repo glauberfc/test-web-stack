@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Input } from 'components/Base/Form'
+import { srOnly } from 'components/Base/Typography'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 type SearchInputProps = {
@@ -33,7 +34,7 @@ export default function SearchInput({
 
   return (
     <>
-      <label htmlFor="search-input" className="sr-only">
+      <label htmlFor="search-input" css={[srOnly]}>
         Search input
       </label>
       <Input
