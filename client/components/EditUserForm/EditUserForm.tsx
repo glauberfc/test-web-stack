@@ -67,7 +67,7 @@ export default function EditUserForm(props: EditUserFormProps) {
 
   return (
     <div>
-      <H1 css={{ margin: '0 0 40px 0' }}>Edit user</H1>
+      <H1 css={{ marginBottom: '64px' }}>Edit user</H1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         css={{

@@ -9,14 +9,15 @@ export const Overlay = styled.div({
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  backgroundColor: 'rgba(0, 0, 0, 0.3)',
   zIndex: 10,
+  overflow: 'auto',
 })
 
 export const Container = styled.div(({ theme }) => ({
   flex: 1,
-  maxWidth: '460px',
-  padding: '40px 22px',
-  backgroundColor: theme.colors.base,
-  borderRadius: '4px',
+  maxWidth: '749px',
+  padding: '64px',
+  borderRadius: '8px',
+  backgroundColor: theme.colors.gray100,
 }))
