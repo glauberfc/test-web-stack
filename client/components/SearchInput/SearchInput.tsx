@@ -44,7 +44,7 @@ export default function SearchInput({
         value={value}
         onChange={handleChange}
         css={{
-          minWidth: '248px',
+          minWidth: '400px',
         }}
       />
     </>

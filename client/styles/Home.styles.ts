@@ -5,7 +5,7 @@ export const Header = styled.header(({ theme }) => ({
   justifyContent: 'space-between',
   gap: '30px',
   maxWidth: theme.screens.xl,
-  margin: '114px auto 0',
+  margin: '64px auto 0',
 }))
 
 export const MainSection = styled.main(({ theme }) => ({

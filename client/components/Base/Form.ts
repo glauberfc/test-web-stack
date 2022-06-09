@@ -2,26 +2,29 @@ import { Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 
 const alertProps = (theme: Theme) => ({
-  marginTop: '5px',
-  fontSize: '0.875rem',
+  marginTop: '8px',
+  fontSize: '1rem',
   color: theme.colors.danger,
 })
 
 const inputProps = (theme: Theme) => ({
-  padding: '10px 8px',
-  borderRadius: '4px',
-  border: `1px solid ${theme.colors.gray200}`,
+  height: '64px',
+  padding: '16px',
+  fontSize: '1.5rem',
+  fontWeight: '400',
+  borderRadius: '8px',
+  border: '1px solid rgba(0, 0, 0, 0.1)',
   background: theme.colors.base,
-  fontSize: '0.875rem',
 })
 
 export const FormGroup = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   '> label': {
-    fontSize: '0.75rem',
-    fontWeight: 'bold',
-    marginBottom: '6px',
+    fontWeight: 600,
+    fontSize: '1.125rem',
+    lineHeight: '1.438rem',
+    marginBottom: '8px',
   },
   '> input': {
     ...inputProps(theme),
