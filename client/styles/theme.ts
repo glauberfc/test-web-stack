@@ -1,5 +1,7 @@
 import { Theme } from '@emotion/react'
 
+export const defaultTransition = 'all 0.2s ease-in-out'
+
 export const colors = {
   base: '#fff',
   gray100: '#f8f8f8',

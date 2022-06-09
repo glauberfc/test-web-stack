@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-
-const transition = 'all 0.2s ease-in-out'
+import { defaultTransition } from 'styles/theme'
 
 export const Card = styled.div(({ theme }) => ({
   display: 'flex',
@@ -9,9 +8,9 @@ export const Card = styled.div(({ theme }) => ({
   width: '100%',
   borderRadius: '8px',
   backgroundColor: theme.colors.base,
-  transition,
+  transition: defaultTransition,
   '> *': {
-    transition,
+    transition: defaultTransition,
   },
   ':hover': {
     cursor: 'pointer',

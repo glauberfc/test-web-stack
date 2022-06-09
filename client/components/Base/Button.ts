@@ -1,5 +1,6 @@
 import { Theme } from '@emotion/react'
 import styled from '@emotion/styled'
+import { defaultTransition } from 'styles/theme'
 
 const buttonVariants = (theme: Theme) => ({
   primary: {
@@ -15,19 +16,29 @@ type ButtonProps = {
 }
 
 const Button = styled.button<ButtonProps>(
-  ({ theme }) => ({
-    padding: '18px 15px',
-    border: `2px solid ${theme.colors.gray200}`,
-    lineHeight: '1',
-    fontSize: '0.813rem',
-    fontWeight: 'bold',
+  {
+    width: '280px',
+    height: '90px',
+    border: '4px solid rgba(0, 0, 0, 0.1)',
+    padding: '11px 14px',
+    fontWeight: 600,
+    fontSize: '1.5rem',
+    lineHeight: '1.875rem',
+    textAlign: 'center',
     textTransform: 'uppercase',
     cursor: 'pointer',
-    borderRadius: '3px',
-    ':hover': {
-      background: theme.colors.gray300,
+    borderRadius: '8px',
+    transition: defaultTransition,
+    '&:hover:not(:disabled)': {
+      border: '4px solid rgba(0, 0, 0, 0.4)',
     },
-  }),
+    '&:focus:not(:disabled)': {
+      border: '4px solid rgba(0, 0, 0, 0.5)',
+    },
+    '&:disabled': {
+      color: 'rgba(0, 0, 0, 0.5)',
+    },
+  },
   ({ variant = 'primary', theme }) => buttonVariants(theme)[variant],
 )
 

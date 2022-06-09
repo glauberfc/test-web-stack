@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import Button from 'components/Base/Button'
 import { H1 } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
 import Modal from 'components/Modal/Modal'
@@ -90,13 +92,16 @@ const Home: NextPage = () => {
           ))}
         </Grid>
 
-        <button
+        <Button
           type="button"
           onClick={handleFetchMore}
           disabled={!hasNextPage || loading}
+          css={{
+            marginTop: '64px',
+          }}
         >
           {hasNextPage ? 'Load more' : 'No more users'}
-        </button>
+        </Button>
 
         <Modal isOpen={modalStatus.isOpen}>
           <EditUserForm
