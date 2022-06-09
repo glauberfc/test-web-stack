@@ -66,29 +66,29 @@ describe('Edit user modal', () => {
     await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)))
     expect(await screen.findAllByRole('alert')).toHaveLength(1)
   })
-})
 
-it('should show errors correctly for each input', async () => {
-  render(
-    <AllProviders>
-      <EditUserForm user={user} onSubmitSuccess={() => null} />,
-    </AllProviders>,
-  )
+  it('should show errors correctly for each input', async () => {
+    render(
+      <AllProviders>
+        <EditUserForm user={user} onSubmitSuccess={() => null} />,
+      </AllProviders>,
+    )
 
-  const name = screen.getByLabelText(/name/i)
-  const location = screen.getByLabelText(/location/i)
-  const description = screen.getByLabelText(/description/i)
-  const saveButton = screen.getByRole('button', { name: /save/i })
+    const name = screen.getByLabelText(/name/i)
+    const location = screen.getByLabelText(/location/i)
+    const description = screen.getByLabelText(/description/i)
+    const saveButton = screen.getByRole('button', { name: /save/i })
 
-  await userEvent.clear(name)
-  await userEvent.click(saveButton)
-  expect(await screen.findAllByRole('alert')).toHaveLength(1)
+    await userEvent.clear(name)
+    await userEvent.click(saveButton)
+    expect(await screen.findAllByRole('alert')).toHaveLength(1)
 
-  await userEvent.clear(location)
-  await userEvent.click(saveButton)
-  expect(await screen.findAllByRole('alert')).toHaveLength(2)
+    await userEvent.clear(location)
+    await userEvent.click(saveButton)
+    expect(await screen.findAllByRole('alert')).toHaveLength(2)
 
-  await userEvent.clear(description)
-  await userEvent.click(saveButton)
-  expect(await screen.findAllByRole('alert')).toHaveLength(3)
+    await userEvent.clear(description)
+    await userEvent.click(saveButton)
+    expect(await screen.findAllByRole('alert')).toHaveLength(3)
+  })
 })
