@@ -56,12 +56,20 @@ const Home: NextPage = () => {
     }
   }
 
-  function searchCallback(value: string) {
-    refetch({ name: { _ilike: `%${value}%` } })
+  async function searchCallback(value: string) {
+    try {
+      await refetch({ name: { _ilike: `%${value}%` } })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  function clearSearchCallback() {
-    refetch({ ...defaultQueryVariables, name: {} })
+  async function clearSearchCallback() {
+    try {
+      refetch({ ...defaultQueryVariables, name: {} })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   function getButtonText() {
@@ -156,14 +164,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { query } = context
   const page = Number(query?.page)
 
-  await apolloClient.query({
-    query: UsersDocument,
-    variables: getPaginationVariables(page),
-  })
+  try {
+    await apolloClient.query({
+      query: UsersDocument,
+      variables: getPaginationVariables(page),
+    })
 
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+    return addApolloState(apolloClient, {
+      props: {},
+    })
+  } catch (error) {
+    return {
+      props: {},
+    }
+  }
 }
 
 export default Home
