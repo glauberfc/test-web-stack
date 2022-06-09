@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import Button from 'components/Base/Button'
+import { FormGroup, Input } from 'components/Base/Form'
 import { Users as User, useUpdateUsersMutation } from 'graphql-files/generated'
 import { MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
@@ -62,46 +65,66 @@ export default function EditUserForm(props: EditUserFormProps) {
   }
 
   return (
-    <>
+    <div>
       <h2>Edit user</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="input-name">Name</label>
-        <input
-          id="input-name"
-          type="text"
-          {...register('name', { required: true })}
-        />
-        {showInputError('name')}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          '> div': {
+            margin: '10px auto',
+            width: '100%',
+          },
+        }}
+      >
+        <FormGroup>
+          <label htmlFor="input-name">Name</label>
+          <Input
+            id="input-name"
+            type="text"
+            {...register('name', { required: true })}
+          />
+          {showInputError('name')}
+        </FormGroup>
 
-        <label htmlFor="input-address">Location</label>
-        <input
-          id="input-address"
-          type="text"
-          {...register('address', { required: true })}
-        />
-        {showInputError('address')}
+        <FormGroup>
+          <label htmlFor="input-address">Location</label>
+          <Input
+            id="input-address"
+            type="text"
+            {...register('address', { required: true })}
+          />
+          {showInputError('address')}
+        </FormGroup>
 
-        <label htmlFor="input-description">Description</label>
-        <input
-          id="input-description"
-          type="text"
-          {...register('description', { required: true })}
-        />
-        {showInputError('description')}
+        <FormGroup>
+          <label htmlFor="input-description">Description</label>
+          <Input
+            id="input-description"
+            type="text"
+            {...register('description', { required: true })}
+          />
+          {showInputError('description')}
+        </FormGroup>
 
         {error && <span role="alert">{error.message}</span>}
 
-        <button type="submit" disabled={isSubmitting}>
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={handleCancelClick}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </button>
+        <div>
+          <Button type="submit" disabled={isSubmitting}>
+            Save
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleCancelClick}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
-    </>
+    </div>
   )
 }
