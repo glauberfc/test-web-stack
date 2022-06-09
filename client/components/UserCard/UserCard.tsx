@@ -2,6 +2,7 @@
 import { Avatar, AvatarContainer } from 'components/Base/Avatar'
 import { Card } from 'components/Base/Card'
 import { H2, Paragraph, truncate } from 'components/Base/Typography'
+import EditIcon from 'components/Icons/EditIcon'
 
 type UserCardProps = {
   name: string
@@ -23,12 +24,23 @@ export default function UserCard({
         maxWidth: '400px',
         height: '338px',
         padding: '40px 32px',
+        ':not(:hover) > svg': {
+          opacity: 0,
+        },
       }}
     >
+      <EditIcon
+        css={(theme) => ({
+          position: 'absolute',
+          top: '18px',
+          right: '23px',
+          fill: theme.colors.gray400,
+        })}
+      />
       <AvatarContainer>
         <Avatar
           src="https://randomuser.me/api/portraits/women/73.jpg"
-          alt="picture"
+          alt="User picture"
           layout="fill"
           objectFit="cover"
         />
