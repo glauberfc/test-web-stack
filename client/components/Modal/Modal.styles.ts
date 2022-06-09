@@ -15,8 +15,8 @@ export const Overlay = styled.div({
 
 export const Container = styled.div(({ theme }) => ({
   flex: 1,
-  maxWidth: '400px',
-  padding: '20px',
+  maxWidth: '460px',
+  padding: '40px 22px',
   backgroundColor: theme.colors.base,
   borderRadius: '4px',
 }))

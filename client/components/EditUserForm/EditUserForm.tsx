@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import Button from 'components/Base/Button'
 import { Alert, FormGroup } from 'components/Base/Form'
+import { Title } from 'components/Base/Typography'
 import { Users as User, useUpdateUsersMutation } from 'graphql-files/generated'
 import { MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
@@ -66,7 +67,7 @@ export default function EditUserForm(props: EditUserFormProps) {
 
   return (
     <div>
-      <h2>Edit user</h2>
+      <Title css={{ margin: '0 0 40px 0' }}>Edit user</Title>
       <form
         onSubmit={handleSubmit(onSubmit)}
         css={{

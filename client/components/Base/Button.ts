@@ -4,11 +4,9 @@ import styled from '@emotion/styled'
 const buttonVariants = (theme: Theme) => ({
   primary: {
     background: theme.colors.base,
-    color: theme.colors.text,
   },
   secondary: {
     background: theme.colors.gray100,
-    color: theme.colors.text,
   },
 })
 
