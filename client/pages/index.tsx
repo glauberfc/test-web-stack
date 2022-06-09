@@ -1,7 +1,8 @@
-import { MainTitle } from 'components/Base/Typography'
+import { H1 } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
 import Modal from 'components/Modal/Modal'
 import SearchInput from 'components/SearchInput/SearchInput'
+import UserCard from 'components/UserCard/UserCard'
 import { Users as User, useUsersQuery } from 'graphql-files/generated'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -69,7 +70,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header>
-        <MainTitle className={styles.title}>Users list</MainTitle>
+        <H1 className={styles.title}>Users list</H1>
         <SearchInput
           searchCallback={searchCallback}
           clearSearchCallback={clearSearchCallback}
@@ -78,17 +79,14 @@ const Home: NextPage = () => {
       <MainSection>
         <Grid>
           {data?.users.map((user) => (
-            <div
+            <UserCard
               key={user.id}
-              className={styles.card}
-              data-testid="user-card"
+              name={user.name}
+              description={user.description}
               onClick={() =>
                 setModalStatus({ isOpen: true, selectedUser: user })
               }
-            >
-              <h2>{user.name}</h2>
-              <p>{user.description}</p>
-            </div>
+            />
           ))}
         </Grid>
 

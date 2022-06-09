@@ -1,30 +1,27 @@
 import styled from '@emotion/styled'
 
-const maxWidth = '820px'
-
-export const Header = styled.header({
+export const Header = styled.header(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   gap: '30px',
-  maxWidth: maxWidth,
+  maxWidth: theme.screens.xl,
   margin: '114px auto 0',
-})
+}))
 
-export const MainSection = styled.main({
+export const MainSection = styled.main(({ theme }) => ({
   flex: '1',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  maxWidth: maxWidth,
+  maxWidth: theme.screens.xl,
   minHeight: '100vh',
   margin: '0 auto',
-})
+}))
 
 export const Grid = styled.div({
   display: 'flex',
-  justifyContent: 'space-between',
   flexWrap: 'wrap',
+  gap: '64px',
   width: '100%',
-  maxWidth: '800px',
-  marginTop: '34px',
+  marginTop: '64px',
 })
