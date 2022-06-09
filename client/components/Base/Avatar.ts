@@ -8,6 +8,7 @@ export const AvatarContainer = styled.div({
   margin: '0 auto',
 })
 
-export const Avatar = styled(Image)({
+export const Avatar = styled(Image)(({ theme }) => ({
   borderRadius: '50%',
-})
+  backgroundColor: theme.colors.gray100,
+}))

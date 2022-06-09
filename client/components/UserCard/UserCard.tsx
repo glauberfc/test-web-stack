@@ -3,6 +3,8 @@ import { Avatar, AvatarContainer } from 'components/Base/Avatar'
 import { Card } from 'components/Base/Card'
 import { H2, Paragraph, truncate } from 'components/Base/Typography'
 import EditIcon from 'components/Icons/EditIcon'
+import { useMemo } from 'react'
+import { getRandomUserPictureUrl } from 'utils'
 
 type UserCardProps = {
   name: string
@@ -15,6 +17,8 @@ export default function UserCard({
   name,
   description,
 }: UserCardProps) {
+  const userPicture = useMemo(() => getRandomUserPictureUrl(), [])
+
   return (
     <Card
       data-testid="user-card"
@@ -37,10 +41,12 @@ export default function UserCard({
           fill: theme.colors.gray400,
         })}
       />
+
       <AvatarContainer>
         <Avatar
-          src="https://randomuser.me/api/portraits/women/73.jpg"
+          src={userPicture}
           alt="User picture"
+          quality={80}
           layout="fill"
           objectFit="cover"
         />
