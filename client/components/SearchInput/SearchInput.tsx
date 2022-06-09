@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { Input } from 'components/Base/Form'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 type SearchInputProps = {
@@ -34,13 +36,16 @@ export default function SearchInput({
       <label htmlFor="search-input" className="sr-only">
         Search input
       </label>
-      <input
+      <Input
         id="search-input"
         type="search"
         role="searchbox"
         placeholder="Search..."
         value={value}
         onChange={handleChange}
+        css={{
+          minWidth: '248px',
+        }}
       />
     </>
   )

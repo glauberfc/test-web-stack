@@ -1,3 +1,4 @@
+import { MainTitle } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
 import Modal from 'components/Modal/Modal'
 import SearchInput from 'components/SearchInput/SearchInput'
@@ -7,6 +8,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import styles from 'styles/Home.module.css'
+import { Grid, Header, MainSection } from 'styles/Home.styles'
 
 export type ModalStatus = {
   isOpen: boolean
@@ -66,17 +68,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Users list</h1>
-
-        <div className={styles.description}>
-          <SearchInput
-            searchCallback={searchCallback}
-            clearSearchCallback={clearSearchCallback}
-          />
-        </div>
-
-        <div className={styles.grid}>
+      <Header>
+        <MainTitle className={styles.title}>Users list</MainTitle>
+        <SearchInput
+          searchCallback={searchCallback}
+          clearSearchCallback={clearSearchCallback}
+        />
+      </Header>
+      <MainSection>
+        <Grid>
           {data?.users.map((user) => (
             <div
               key={user.id}
@@ -90,7 +90,7 @@ const Home: NextPage = () => {
               <p>{user.description}</p>
             </div>
           ))}
-        </div>
+        </Grid>
 
         <button
           type="button"
@@ -114,7 +114,7 @@ const Home: NextPage = () => {
             }
           />
         </Modal>
-      </main>
+      </MainSection>
     </div>
   )
 }

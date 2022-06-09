@@ -1,6 +1,14 @@
 import styled from '@emotion/styled'
 
-export const Title = styled.h2(({ theme }) => ({
+const titleProps = {
   fontSize: '1.5rem',
   fontWeight: '300',
-}))
+}
+
+export const MainTitle = styled.h1({
+  ...titleProps,
+})
+
+export const Title = styled.h2({
+  ...titleProps,
+})
