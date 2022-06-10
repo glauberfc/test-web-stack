@@ -46,7 +46,7 @@ export default function UserCard({
         <Avatar
           src={userPicture}
           alt="User picture"
-          quality={80}
+          quality={100}
           layout="fill"
           objectFit="cover"
         />
