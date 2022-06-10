@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Superformula Web Developer Test
 
-## Getting Started
+## Live demo
+[test-web-stack-glauberfc.vercel.app](http://test-web-stack-glauberfc.vercel.app/)
 
-First, run the development server:
+## Stack
+- Frontend: React, Next.js, Apollo client, GraphQL Code Generator, Typescript, Emotion CSS, React Hook Form
+- Test: Jest, Cypress, React Testing Library
+- API: GraphQL, Hasura
 
+## Running the app
+1. Create an `env.local` file with the environment variables sent by email
+
+2. Install the dependencies:
+```bash
+npm install
+# or
+yarn
+```
+
+3. Run the app:
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running tests
+- To run Cypress tests:
+```bash
+npm run e2e:headless
+# or
+yarn e2e:headless
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- To run Jest tests:
+```bash
+npm run test:ci
+# or
+yarn test:ci
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Limitations
+Due to time limitations, I have not implemented the requirements below:
+- Use unsplash.com to show random avatar images (I used randomuser.me API)
+- Show map with user location on modal (I'd use Mapbox or Google Maps API)
+- Show user creation date on card (I'd use Day.js to format the date)
+- Animate disappear of modal
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Possible improvements
+- Load components dynamically when possible
+- Use `react-error-boundary` to handle errors
+- Improve feedback messages (e.g. when user is updated with success)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## How I approach mobile friendly apps
+In simple terms, I try to adopt a mobile first approach developing the components first for mobile and then for desktop. I also like to use Storybook to easily check that if component is adapting to different screen sizes.
