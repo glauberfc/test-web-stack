@@ -32,8 +32,9 @@ describe('Edit user', () => {
     })
 
     cy.findByRole('dialog').should('not.exist')
+    cy.findByRole('searchbox').type(user.name)
+
     cy.findByRole('main').within(() => {
-      cy.findByRole('searchbox').type(user.name)
       cy.findAllByTestId('user-card').should('have.length', 1)
     })
   })
