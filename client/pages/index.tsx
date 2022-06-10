@@ -116,6 +116,10 @@ const Home: NextPage = () => {
 
         <div
           css={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '64px',
             margin: '64px 0',
           }}
         >
@@ -123,7 +127,6 @@ const Home: NextPage = () => {
             <Paragraph
               css={{
                 fontSize: '1.5rem',
-                margin: '0 auto 64px',
                 textAlign: 'center',
               }}
             >
