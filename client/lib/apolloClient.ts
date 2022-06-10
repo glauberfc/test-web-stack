@@ -9,7 +9,7 @@ import {
 import { onError } from '@apollo/client/link/error'
 import { offsetLimitPagination } from '@apollo/client/utilities'
 import merge from 'deepmerge'
-import isEqual from 'lodash.isEqual'
+import isEqual from 'lodash/isEqual'
 import { AppProps } from 'next/app'
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
