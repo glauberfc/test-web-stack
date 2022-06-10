@@ -1,4 +1,10 @@
+import { keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
+
+const fadeIn = keyframes`
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+`
 
 export const Overlay = styled.div({
   display: 'flex',
@@ -12,6 +18,7 @@ export const Overlay = styled.div({
   backgroundColor: 'rgba(0, 0, 0, 0.3)',
   zIndex: 10,
   overflow: 'auto',
+  animation: `${fadeIn} 0.2s ease-in-out`,
 })
 
 export const Container = styled.div(({ theme }) => ({
