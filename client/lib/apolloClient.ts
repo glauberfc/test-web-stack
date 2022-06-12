@@ -11,8 +11,11 @@ import { offsetLimitPagination } from '@apollo/client/utilities'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
 import { AppProps } from 'next/app'
-
-export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
+import {
+  APOLLO_STATE_PROP_NAME,
+  NEXT_PUBLIC_HASURA_API_SECRET,
+  NEXT_PUBLIC_HASURA_API_URL,
+} from '@constants'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined
 
@@ -27,9 +30,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 })
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_HASURA_API_URL,
+  uri: NEXT_PUBLIC_HASURA_API_URL,
   headers: {
-    'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_API_SECRET ?? '',
+    'x-hasura-admin-secret': NEXT_PUBLIC_HASURA_API_SECRET,
   },
 })
 
@@ -41,7 +44,10 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            users: offsetLimitPagination(),
+            users: offsetLimitPagination(['where', ['name', ['_ilike', ['']]]]),
+            users_aggregate: {
+              keyArgs: ['where', ['name', ['_ilike', ['']]]],
+            },
           },
         },
       },

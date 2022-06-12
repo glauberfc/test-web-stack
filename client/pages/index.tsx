@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { NetworkStatus } from '@apollo/client'
+import { ITEMS_PER_PAGE } from '@constants'
 import Button from 'components/Base/Button'
 import { H1, Paragraph } from 'components/Base/Typography'
 import EditUserForm from 'components/EditUserForm/EditUserForm'
@@ -28,15 +29,21 @@ const Home: NextPage = () => {
   const router = useRouter()
   const [modalStatus, setModalStatus] = useState<ModalStatus>({ isOpen: false })
   const page = Number(router.query?.page)
-  const defaultQueryVariables = getPaginationVariables(page)
+  const defaultQueryVariables = {
+    limit: ITEMS_PER_PAGE,
+    offset: (page - 1) * ITEMS_PER_PAGE,
+  }
 
   const { data, loading, error, fetchMore, refetch, networkStatus } =
     useUsersQuery({
       variables: defaultQueryVariables,
       notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-first',
+      nextFetchPolicy: 'cache-and-network',
     })
 
   const isLoading = loading || networkStatus === NetworkStatus.refetch
+
   const hasNextPage =
     Number(data?.users_aggregate.aggregate?.count) > Number(data?.users.length)
 
@@ -58,7 +65,10 @@ const Home: NextPage = () => {
 
   async function searchCallback(value: string) {
     try {
-      await refetch({ name: { _ilike: `%${value}%` } })
+      await refetch({
+        name: { _ilike: `%${value}%` },
+        ...getPaginationVariables(page),
+      })
     } catch (error) {
       console.error(error)
     }
@@ -66,7 +76,10 @@ const Home: NextPage = () => {
 
   async function clearSearchCallback() {
     try {
-      refetch({ ...defaultQueryVariables, name: {} })
+      await refetch({
+        name: {},
+        ...getPaginationVariables(page),
+      })
     } catch (error) {
       console.error(error)
     }
@@ -78,12 +91,6 @@ const Home: NextPage = () => {
     if (data?.users.length === 0) return 'No users found'
     return 'No more users'
   }
-
-  useEffect(() => {
-    if (!page) {
-      router.push(`/?page=1`, undefined, { shallow: true })
-    }
-  }, [router, page])
 
   return (
     <div>
@@ -166,6 +173,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const apolloClient = initializeApollo()
   const { query } = context
   const page = Number(query?.page)
+  const redirect = !page
+    ? {
+        destination: '/?page=1',
+        permanent: false,
+      }
+    : undefined
 
   try {
     await apolloClient.query({
@@ -175,6 +188,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return addApolloState(apolloClient, {
       props: {},
+      redirect,
     })
   } catch (error) {
     return {
