@@ -1,11 +1,12 @@
 /// <reference types="cypress" />
 
-import user from '../fixtures/user.json'
+import { generateNewUser } from 'tests/utils'
 
 describe('Edit user', () => {
-  it('should edit user', () => {
-    cy.visit('/')
+  it('Should edit user', () => {
+    const user = generateNewUser()
 
+    cy.visit('/')
     cy.findByRole('main').within(() => {
       cy.findAllByTestId('user-card').first().click()
     })
@@ -39,5 +40,3 @@ describe('Edit user', () => {
     })
   })
 })
-
-export {}

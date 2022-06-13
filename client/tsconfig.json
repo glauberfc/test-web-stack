@@ -15,11 +15,11 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": "./",
-    "types": ["cypress", "@testing-library/cypress"],
     "paths": {
       "@constants": ["constants"]
     }
   },
+
   "include": ["next-env.d.ts", "emotion.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "cypress", "**/*.test.ts", "**/*.test.tsx"]
 }
