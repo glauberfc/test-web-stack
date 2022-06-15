@@ -1,15 +1,10 @@
-import {
-  randFullName,
-  randSentence,
-  randStreetAddress,
-  randUuid,
-} from '@ngneat/falso'
+import { faker } from '@faker-js/faker'
 
 export function generateNewUser() {
   return {
-    id: randUuid(),
-    name: randFullName(),
-    address: randStreetAddress(),
-    description: randSentence(),
+    id: faker.datatype.uuid(),
+    name: faker.name.findName(),
+    address: faker.address.streetAddress(),
+    description: faker.lorem.sentence(),
   }
 }

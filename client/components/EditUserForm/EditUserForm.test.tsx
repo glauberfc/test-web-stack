@@ -5,9 +5,10 @@ import { screen, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { GraphQLError } from 'graphql'
 
-import { UpdateUsersDocument } from '../../graphql-files/generated'
+import { UpdateUsersDocument } from 'graphql-files/generated'
 import EditUserForm from './EditUserForm'
-import theme from '../../styles/theme'
+import theme from 'styles/theme'
+import { generateNewUser } from 'tests/utils'
 
 type AllProvidersProps = {
   children: ReactNode
@@ -22,12 +23,7 @@ function AllProviders({ children, mocks = [] }: AllProvidersProps) {
   )
 }
 
-const user = {
-  id: '123456',
-  name: 'Eric Scott',
-  address: '123 Main St',
-  description: 'Lorem ipsum dolor sit amet',
-}
+const user = generateNewUser()
 
 describe('Edit user modal', () => {
   it('should work if receives a user', () => {

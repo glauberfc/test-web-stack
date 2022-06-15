@@ -35,7 +35,7 @@
     "sharp": "^0.30.6"
   },
   "devDependencies": {
-    "@ngneat/falso": "^5.7.0",
+    "@faker-js/faker": "6.3.1",
     "@testing-library/cypress": "^8.0.3",
     "@testing-library/dom": "^8.13.0",
     "@testing-library/jest-dom": "^5.16.4",
